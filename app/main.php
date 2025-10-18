@@ -37,7 +37,7 @@ while (!$should_exit) {
             $cmd_path = getCmdPath($cmd);
             if ($path === null) {
                 fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
-                continue;
+                break;
             }
 
             shell_exec($cmd_path . " " . $input_array[1]);
