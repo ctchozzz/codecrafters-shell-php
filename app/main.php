@@ -40,7 +40,8 @@ while (!$should_exit) {
                 break;
             }
 
-            $output = shell_exec($cmd_path . " " . $input_array[1]);
+            // exec exists
+            $output = shell_exec($cmd . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
