@@ -34,7 +34,13 @@ while (!$should_exit) {
             fwrite(stream: STDOUT, data: $arg . " is " . $path . "\n");
             break;
         default:
-            fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+            $cmd_path = getCmdPath($cmd);
+            if ($path === null) {
+                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+                continue;
+            }
+
+            shell_exec($cmd_path . " " . $input_array[1]);
     }
 }
 
