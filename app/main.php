@@ -46,7 +46,7 @@ function getCmdPath(string $cmd): ?string
         return null;
     }
     $paths = explode(PATH_SEPARATOR, $path_var);
-    print ($cmd);
+    print ($path_var);
     print ($paths);
     foreach ($paths as $path) {
         if (!str_ends_with($path, $cmd)) {
