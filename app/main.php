@@ -12,7 +12,6 @@ while (!$should_exit) {
     switch ($cmd) {
         case "exit":
             $arg = $input_array[1];
-            fwrite(stream: STDOUT, data: "exit " . $arg);
             $should_exit = true;
             break;
         default:
