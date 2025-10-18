@@ -50,9 +50,10 @@ function getCmdPath(string $cmd): ?string
         if (!str_ends_with($path, $cmd)) {
             continue;
         }
-        if (file_exists($path)) {
-            return $path;
-        }
+        return $path;
+        // if (file_exists($path)) {
+        //     return $path;
+        // }
     }
     return null;
 }
