@@ -49,11 +49,12 @@ function getCmdPath(string $cmd): ?string
     print ($path_var);
     print ($paths);
     foreach ($paths as $path) {
-        if (!str_ends_with($path, $cmd)) {
-            continue;
-        }
-        if (file_exists($path)) {
+        if (str_ends_with($path, $cmd) && file_exists($path)) {
             return $path;
+        }
+        $filepath = $path . DIRECTORY_SEPARATOR . $cmd;
+        if (file_exists($filepath)) {
+            return $filepath;
         }
     }
     return null;
