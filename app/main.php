@@ -45,13 +45,11 @@ function getCmdPath(string $cmd): ?string
     if ($path_var === null) {
         return null;
     }
+    // paths is just a list of directories
     $paths = explode(PATH_SEPARATOR, $path_var);
     foreach ($paths as $path) {
-        if (str_ends_with($path, $cmd) && file_exists($path)) {
-            return $path;
-        }
         $filepath = $path . DIRECTORY_SEPARATOR . $cmd;
-        if (file_exists($filepath)) {
+        if (file_exists($filepath) && is_executable($filepath)) {
             return $filepath;
         }
     }
