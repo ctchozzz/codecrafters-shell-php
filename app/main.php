@@ -23,12 +23,36 @@ while (!$should_exit) {
             $arg = $input_array[1];
             if (in_array($arg, $supported_cmd)) {
                 fwrite(STDOUT, data: $arg . " is a shell builtin\n");
-            } else {
-                fwrite(stream: STDOUT, data: $arg . ": not found\n");
+                break;
             }
+
+            $path = getCmdPath($arg);
+            if ($path === null) {
+                fwrite(stream: STDOUT, data: $arg . ": not found\n");
+                break;
+            }
+            fwrite(stream: STDOUT, data: $arg . " is " . $path . "\n");
             break;
         default:
             fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
     }
 }
 
+
+function getCmdPath(string $cmd): ?string
+{
+    $path_var = getenv("PATH");
+    if ($path_var === null) {
+        return null;
+    }
+    $paths = explode(PATH_SEPARATOR, $path_var);
+    foreach ($paths as $path) {
+        if (!str_ends_with($path, $cmd)) {
+            continue;
+        }
+        if (file_exists($path)) {
+            return $path;
+        }
+    }
+    return null;
+}
