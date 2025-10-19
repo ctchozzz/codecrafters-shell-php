@@ -45,7 +45,7 @@ while (!$should_exit) {
             }
 
             // exec exists
-            $output = shell_exec($cmd . " " . $input_array[1]);
+            $output = shell_exec(escapeshellcmd($cmd) . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
