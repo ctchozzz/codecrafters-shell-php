@@ -48,7 +48,7 @@ while (!$should_exit) {
             if (str_contains($input_array[1], "f3")) {
                 print ('path: ' . $cmd_path);
             }
-            $output = shell_exec("'" . str_replace("'", "\'", $cmd_path) . "' " . $input_array[1]);
+            $output = shell_exec("'" . $cmd_path . "' " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
