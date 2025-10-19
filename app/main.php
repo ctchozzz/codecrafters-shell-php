@@ -98,6 +98,12 @@ function processQuotedStr(string $str): string
         switch ($char) {
             case "\"":
             case "'":
+                if ($is_escaped) {
+                    $res .= $char;
+                    $is_escaped = false;
+                    break;
+                }
+
                 if (empty($curr_quote)) {
                     // opening quote
                     $curr_quote = $char;
@@ -125,6 +131,7 @@ function processQuotedStr(string $str): string
                 }
                 break;
             default:
+                $is_escaped = false;
                 $res .= $char;
         }
     }
