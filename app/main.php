@@ -40,7 +40,7 @@ while (!$should_exit) {
         default:
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: escapeshellcmd($cmd) . ": command not found\n");
+                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
                 break;
             }
 
@@ -77,6 +77,7 @@ function getCmdPath(string $cmd): ?string
     $paths = explode(PATH_SEPARATOR, $path_var);
     foreach ($paths as $path) {
         $filepath = $path . DIRECTORY_SEPARATOR . $cmd;
+        print ("" . $filepath . "");
         if (file_exists($filepath) && is_executable($filepath)) {
             return $filepath;
         }
