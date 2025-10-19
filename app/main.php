@@ -41,7 +41,7 @@ while (!$should_exit) {
             $path = $input_array[1];
             $success = chdir($path);
             if (!$success) {
-                fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory");
+                fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory\n");
             }
             break;
         default:
