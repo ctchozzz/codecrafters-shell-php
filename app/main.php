@@ -19,7 +19,7 @@ while (!$should_exit) {
             fwrite(stream: STDOUT, data: $arg . "\n");
             break;
         case "type":
-            processTypeCmd($input_arary[1]);
+            processTypeCmd($input_array[1]);
             break;
         case "pwd":
             $curr_dir = getcwd();
