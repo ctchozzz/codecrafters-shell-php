@@ -37,6 +37,8 @@ while (!$should_exit) {
                 break;
             }
 
+            print ($parsed_cmd);
+
             // exec exists
             $output = shell_exec($parsed_cmd . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
