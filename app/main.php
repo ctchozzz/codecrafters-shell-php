@@ -77,7 +77,12 @@ function getCmdPath(string $cmd): ?string
 
 function navigate(string $path): void
 {
-    if (!is_dir($path) || !chdir($path)) {
-        fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory\n");
+    $new_path = $path;
+    if (str_starts_with($path, "~")) {
+        $home = getenv("HOME");
+        $new_path = str_replace("~", $home, $new_path);
+    }
+    if (!is_dir($new_path) || !chdir($new_path)) {
+        fwrite(stream: STDOUT, data: "cd: " . $new_path . ": No such file or directory\n");
     }
 }
