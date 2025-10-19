@@ -77,7 +77,7 @@ function getCmdPath(string $cmd): ?string
     $paths = explode(PATH_SEPARATOR, $path_var);
     foreach ($paths as $path) {
         $filepath = $path . DIRECTORY_SEPARATOR . $cmd;
-        print ("" . $filepath . "");
+        print ('file exists: ' . file_exists($filepath) . ' isexecubtable: ' . is_executable($filepath));
         if (file_exists($filepath) && is_executable($filepath)) {
             return $filepath;
         }
