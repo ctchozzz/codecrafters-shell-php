@@ -91,7 +91,7 @@ function navigate(string $path): void
 function processQuotedStr(string $str): string
 {
     $res = "";
-    $curr_quote = '';
+    $curr_quote = "";
     for ($i = 0; $i < strlen($str); $i++) {
         $char = $str[$i];
         switch ($char) {
@@ -106,9 +106,11 @@ function processQuotedStr(string $str): string
                     $curr_quote = "";
                     break;
                 }
+                $res .= $char;
+                break;
             case " ":
                 // collapse spaces for unquoted string
-                if (!empty($curr_quote) && $i > 0 && $str[$i - 1] === " ") {
+                if (empty($curr_quote) && $i > 0 && $str[$i - 1] === " ") {
                     break;
                 }
             default:
