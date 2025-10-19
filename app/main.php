@@ -29,8 +29,12 @@ while (!$should_exit) {
         case "cd":
             navigate($input_array[1]);
             break;
-        default:
-            $parsed_cmd = processQuotedStr(trim($cmd));
+        case "'":
+        case "\"":
+            $quote = $cmd;
+            $last_quote_pos = strrpos($input, $quote);
+            $str_cmd = substr($input, 0, $last_quote_pos + 1);
+            $parsed_cmd = processQuotedStr($str_cmd);
             $cmd_path = getCmdPath($parsed_cmd);
             if ($cmd_path === null) {
                 fwrite(stream: STDOUT, data: $parsed_cmd . ": command not found\n");
@@ -38,7 +42,19 @@ while (!$should_exit) {
             }
 
             // exec exists
-            $output = shell_exec($parsed_cmd . " " . $input_array[1]);
+            $arg = substr($input, $last_quote_pos + 1);
+            $output = shell_exec($parsed_cmd . " " . $arg);
+            fwrite(stream: STDOUT, data: $output);
+            break;
+        default:
+            $cmd_path = getCmdPath($cmd);
+            if ($cmd_path === null) {
+                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+                break;
+            }
+
+            // exec exists
+            $output = shell_exec($cmd . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
