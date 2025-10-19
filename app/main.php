@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 
-$supported_cmd = array("exit", "echo", "type", "pwd", "cd");
 $should_exit = false;
 while (!$should_exit) {
     fwrite(STDOUT, "$ ");
@@ -20,28 +19,14 @@ while (!$should_exit) {
             fwrite(stream: STDOUT, data: $arg . "\n");
             break;
         case "type":
-            $arg = $input_array[1];
-            if (in_array($arg, $supported_cmd)) {
-                fwrite(STDOUT, data: $arg . " is a shell builtin\n");
-                break;
-            }
-
-            $path = getCmdPath($arg);
-            if ($path === null) {
-                fwrite(stream: STDOUT, data: $arg . ": not found\n");
-                break;
-            }
-            fwrite(stream: STDOUT, data: $arg . " is " . $path . "\n");
+            processTypeCmd($input_arary[1]);
             break;
         case "pwd":
             $curr_dir = getcwd();
             fwrite(stream: STDOUT, data: $curr_dir . "\n");
             break;
         case "cd":
-            $path = $input_array[1];
-            if (!is_dir($path) || !chdir($path)) {
-                fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory\n");
-            }
+            navigate($input_array[1]);
             break;
         default:
             $cmd_path = getCmdPath($cmd);
@@ -56,6 +41,22 @@ while (!$should_exit) {
     }
 }
 
+
+function processTypeCmd(string $cmd): void
+{
+    $supported_cmd = array("exit", "echo", "type", "pwd", "cd");
+    if (in_array($cmd, $supported_cmd)) {
+        fwrite(STDOUT, data: $cmd . " is a shell builtin\n");
+        return;
+    }
+
+    $path = getCmdPath($cmd);
+    if ($path === null) {
+        fwrite(stream: STDOUT, data: $cmd . ": not found\n");
+        return;
+    }
+    fwrite(stream: STDOUT, data: $cmd . " is " . $path . "\n");
+}
 
 function getCmdPath(string $cmd): ?string
 {
@@ -72,4 +73,11 @@ function getCmdPath(string $cmd): ?string
         }
     }
     return null;
+}
+
+function navigate(string $path): void
+{
+    if (!is_dir($path) || !chdir($path)) {
+        fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory\n");
+    }
 }
