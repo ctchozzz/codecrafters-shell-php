@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 
-$supported_cmd = array("exit", "echo", "type");
+$supported_cmd = array("exit", "echo", "type", "pwd");
 $should_exit = false;
 while (!$should_exit) {
     fwrite(STDOUT, "$ ");
