@@ -40,12 +40,12 @@ while (!$should_exit) {
         default:
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+                fwrite(stream: STDOUT, data: escapeshellcmd($cmd) . ": command not found\n");
                 break;
             }
 
             // exec exists
-            $output = shell_exec(escapeshellcmd($cmd_path) . " " . $input_array[1]);
+            $output = shell_exec($cmd_path . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
