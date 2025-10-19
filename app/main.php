@@ -16,7 +16,8 @@ while (!$should_exit) {
             break;
         case "echo":
             $arg = $input_array[1];
-            fwrite(stream: STDOUT, data: $arg . "\n");
+            $str = processQuotedStr(trim($arg));
+            fwrite(stream: STDOUT, data: $str . "\n");
             break;
         case "type":
             processTypeCmd($input_array[1]);
@@ -85,4 +86,26 @@ function navigate(string $path): void
     if (!is_dir($new_path) || !chdir($new_path)) {
         fwrite(stream: STDOUT, data: "cd: " . $new_path . ": No such file or directory\n");
     }
+}
+
+function processQuotedStr(string $str): string
+{
+    $res = "";
+    $is_quote = false;
+    for ($i = 0; $i < strlen($str); $i++) {
+        $char = $str[$i];
+        switch ($char) {
+            case "'":
+                $is_quote = !$is_quote;
+                break;
+            case " ":
+                // collapse spaces for unquoted string
+                if (!$is_quote && $i > 0 && $str[$i - 1] === " ") {
+                    break;
+                }
+            default:
+                $res .= $char;
+        }
+    }
+    return $res;
 }
