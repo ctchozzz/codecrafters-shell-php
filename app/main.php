@@ -49,7 +49,7 @@ while (!$should_exit) {
             }
 
             // exec exists
-            $output = shell_exec($parsed_cmd . " " . $input_array[1]);
+            $output = shell_exec($parsed_cmd . " " . $arg);
             fwrite(stream: STDOUT, data: $output);
     }
 }
