@@ -33,11 +33,9 @@ while (!$should_exit) {
             $parsed_cmd = processQuotedStr(trim($cmd));
             $cmd_path = getCmdPath($parsed_cmd);
             if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: $parssed_cmd . ": command not found\n");
+                fwrite(stream: STDOUT, data: $parsed_cmd . ": command not found\n");
                 break;
             }
-
-            print ($parsed_cmd);
 
             // exec exists
             $output = shell_exec($parsed_cmd . " " . $input_array[1]);
