@@ -92,6 +92,7 @@ function processQuotedStr(string $str): string
 {
     $res = "";
     $curr_quote = "";
+    $is_escaped = false;
     for ($i = 0; $i < strlen($str); $i++) {
         $char = $str[$i];
         switch ($char) {
@@ -109,10 +110,20 @@ function processQuotedStr(string $str): string
                 $res .= $char;
                 break;
             case " ":
-                // collapse spaces for unquoted string
-                if (empty($curr_quote) && $i > 0 && $str[$i - 1] === " ") {
+                // collapse spaces for unquoted unescaped string
+                if (empty($curr_quote) && !$is_escaped && $i > 0 && $str[$i - 1] === " ") {
                     break;
                 }
+                $res .= $char;
+                $is_escaped = false;
+                break;
+            case "\\":
+                if (empty($curr_quote)) {
+                    $is_escaped = true;
+                } else {
+                    $res .= $char;
+                }
+                break;
             default:
                 $res .= $char;
         }
