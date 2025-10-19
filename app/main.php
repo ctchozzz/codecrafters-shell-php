@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 
-$supported_cmd = array("exit", "echo", "type", "pwd");
+$supported_cmd = array("exit", "echo", "type", "pwd", "cd");
 $should_exit = false;
 while (!$should_exit) {
     fwrite(STDOUT, "$ ");
@@ -36,6 +36,13 @@ while (!$should_exit) {
         case "pwd":
             $curr_dir = getcwd();
             fwrite(stream: STDOUT, data: $curr_dir . "\n");
+            break;
+        case "cd":
+            $path = $input_array[1];
+            $success = chdir($path);
+            if (!$success) {
+                fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory");
+            }
             break;
         default:
             $cmd_path = getCmdPath($cmd);
