@@ -95,6 +95,7 @@ function processQuotedStr(string $str): string
     for ($i = 0; $i < strlen($str); $i++) {
         $char = $str[$i];
         switch ($char) {
+            case "\"":
             case "'":
                 $is_quote = !$is_quote;
                 break;
