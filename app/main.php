@@ -45,7 +45,7 @@ while (!$should_exit) {
             }
 
             // exec exists
-            $new_cmd = "'" . str_replace("\'", "'", $cmd_path) . "' " . $input_array[1];
+            $new_cmd = "'" . str_replace("\'", "\"", $cmd_path) . "' " . $input_array[1];
             if (str_contains($input_array[1], 'f3')) {
                 print ('cmd: ' . $new_cmd . "\n");
             }
