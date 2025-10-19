@@ -45,7 +45,11 @@ while (!$should_exit) {
             }
 
             // exec exists
-            $output = shell_exec("'" . $cmd_path . "' " . $input_array[1]);
+            $new_cmd = "'" . $cmd_path . "' " . $input_array[1];
+            if (str_contains($input_array[1], 'f3')) {
+                print ('cmd: ' . $new_cmd . "\n");
+            }
+            $output = shell_exec($new_cmd);
             fwrite(stream: STDOUT, data: $output);
     }
 }
