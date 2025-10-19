@@ -12,7 +12,7 @@ while (!$should_exit) {
         $quote = $input[0];
         $last_quote_pos = strrpos($input, $quote);
         $str_cmd = substr($input, 0, $last_quote_pos + 1);
-        $input_array[0] = processQuotedStr($str_cmd);
+        $input_array[0] = "\"" . processQuotedStr($str_cmd) . "\"";
         $input_array[1] = substr($input, $last_quote_pos + 1);
     }
 
