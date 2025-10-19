@@ -131,7 +131,8 @@ function processQuotedStr(string $str): string
                     break;
                 }
 
-                if (empty($curr_quote) || $i + 1 < strlen($str) && in_array($str[$i + 1], $supported_escaped_char)) {
+                // only allow escape for no quote or double quote
+                if (empty($curr_quote) || $curr_quote === "\"" && $i + 1 < strlen($str) && in_array($str[$i + 1], $supported_escaped_char)) {
                     $is_escaped = true;
                     break;
                 }
