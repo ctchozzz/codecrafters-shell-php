@@ -38,6 +38,8 @@ while (!$should_exit) {
                 $str_cmd = substr($input, 0, $last_quote_pos + 1);
                 $parsed_cmd = processQuotedStr($str_cmd);
                 $arg = substr($input, $last_quote_pos + 1);
+
+                print ('parsed cmd: ' . $parsed_cmd . ' str_cmd: ' . $str_cmd . '  last_quote_pos: ' . $last_quote_pos);
             }
 
 
