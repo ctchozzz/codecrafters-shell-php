@@ -93,6 +93,7 @@ function processQuotedStr(string $str): string
     $res = "";
     $curr_quote = "";
     $is_escaped = false;
+    $supported_escaped_char = array("\"", "\\");
     for ($i = 0; $i < strlen($str); $i++) {
         $char = $str[$i];
         switch ($char) {
@@ -124,11 +125,17 @@ function processQuotedStr(string $str): string
                 $is_escaped = false;
                 break;
             case "\\":
-                if (empty($curr_quote)) {
-                    $is_escaped = true;
-                } else {
+                if ($is_escaped) {
                     $res .= $char;
+                    $is_escaped = false;
+                    break;
                 }
+
+                if (empty($curr_quote) || $i + 1 < strlen($str) && in_array($str[$i + 1], $supported_escaped_char)) {
+                    $is_escaped = true;
+                    break;
+                }
+                $res .= $char;
                 break;
             default:
                 $is_escaped = false;
