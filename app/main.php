@@ -49,7 +49,7 @@ while (!$should_exit) {
             }
             // exec exists
             $closing_quote = "'";
-            if (str_contains($cmd_path, "\\'")) {
+            if (str_contains($cmd_path, "\'")) {
                 $closing_quote = "";
             }
             $new_cmd = "'" . $cmd_path . $closing_quote . " " . $input_array[1];
