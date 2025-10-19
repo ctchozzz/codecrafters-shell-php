@@ -44,10 +44,8 @@ while (!$should_exit) {
                 break;
             }
 
-            print ('the path:' . $cmd_path);
-
             // exec exists
-            $output = shell_exec($cmd_path . " " . $input_array[1]);
+            $output = shell_exec("'" . $cmd_path . "' " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
