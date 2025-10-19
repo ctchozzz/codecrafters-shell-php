@@ -8,6 +8,14 @@ while (!$should_exit) {
     // Wait for user input
     $input = trim(fgets(STDIN));
     $input_array = explode(" ", $input, 2);
+    if ($input[0] === "\"" || $input[0] === "'") {
+        $quote = $input[0];
+        $last_quote_pos = strrpos($input, $quote);
+        $str_cmd = substr($input, 0, $last_quote_pos + 1);
+        $input_array[0] = processQuotedStr($str_cmd);
+        $input_array[1] = substr($input, $last_quote_pos + 1);
+    }
+
     $cmd = $input_array[0];
     switch ($cmd) {
         case "exit":
@@ -30,28 +38,14 @@ while (!$should_exit) {
             navigate($input_array[1]);
             break;
         default:
-            $parsed_cmd = $cmd;
-            $arg = $input_array[1];
-            if ($cmd[0] === "\"" || $cmd[0] === "'") {
-                $quote = $cmd[0];
-                $last_quote_pos = strrpos($input, $quote);
-                $str_cmd = substr($input, 0, $last_quote_pos + 1);
-                $parsed_cmd = processQuotedStr($str_cmd);
-                $arg = substr($input, $last_quote_pos + 1);
-
-                print ('parsed cmd: ' . $parsed_cmd . ' str_cmd: ' . $str_cmd . '  last_quote_pos: ' . $last_quote_pos);
-            }
-
-
-
-            $cmd_path = getCmdPath($parsed_cmd);
+            $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: $parsed_cmd . ": command not found\n");
+                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
                 break;
             }
 
             // exec exists
-            $output = shell_exec($parsed_cmd . " " . $arg);
+            $output = shell_exec($cmd . " " . $arg);
             fwrite(stream: STDOUT, data: $output);
     }
 }
