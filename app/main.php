@@ -44,9 +44,6 @@ while (!$should_exit) {
                 break;
             }
 
-            if (str_contains($input_array[1], "f3")) {
-                print ($cmd_path . " hohoho \n");
-            }
             // exec exists
             $closing_quote = "'";
             if (str_contains($cmd_path, "\'")) {
