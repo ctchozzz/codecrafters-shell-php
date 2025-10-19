@@ -46,10 +46,10 @@ while (!$should_exit) {
 
             // exec exists
             $closing_quote = "'";
-            // if (str_contains($cmd_path, "\'")) {
-            //     $closing_quote = "\"";
-            // }
-            $new_cmd = $closing_quote . $cmd_path . $closing_quote . " " . $input_array[1];
+            if (str_contains($cmd_path, "\'")) {
+                $closing_quote = "\"";
+            }
+            $new_cmd = $closing_quote . $cmd . $closing_quote . " " . $input_array[1];
             $output = shell_exec($new_cmd);
             fwrite(stream: STDOUT, data: $output);
     }
