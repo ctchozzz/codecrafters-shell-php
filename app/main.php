@@ -31,6 +31,7 @@ while (!$should_exit) {
             break;
         case "'":
         case "\"":
+            print ("hello" . $cmd);
             $quote = $cmd;
             $last_quote_pos = strrpos($input, $quote);
             $str_cmd = substr($input, 0, $last_quote_pos + 1);
@@ -47,6 +48,7 @@ while (!$should_exit) {
             fwrite(stream: STDOUT, data: $output);
             break;
         default:
+            print ($cmd);
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
                 fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
