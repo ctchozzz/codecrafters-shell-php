@@ -39,8 +39,7 @@ while (!$should_exit) {
             break;
         case "cd":
             $path = $input_array[1];
-            $success = chdir($path);
-            if (!$success) {
+            if (!is_dir($path) || !chdir($path)) {
                 fwrite(stream: STDOUT, data: "cd: " . $path . ": No such file or directory\n");
             }
             break;
