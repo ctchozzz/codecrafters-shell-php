@@ -33,6 +33,10 @@ while (!$should_exit) {
             }
             fwrite(stream: STDOUT, data: $arg . " is " . $path . "\n");
             break;
+        case "pwd":
+            $curr_dir = getcwd();
+            fwrite(stream: STDOUT, data: $curr_dir . "\n");
+            break;
         default:
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
