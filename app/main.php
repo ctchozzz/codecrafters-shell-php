@@ -98,7 +98,12 @@ function processQuotedStr(string $str): string
             case "\"":
             case "'":
                 if (empty($curr_quote)) {
+                    // opening quote
                     $curr_quote = $char;
+                    break;
+                } elseif ($curr_quote === $char) {
+                    // closing quote
+                    $curr_quote = "";
                     break;
                 }
             case " ":
