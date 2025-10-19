@@ -30,14 +30,15 @@ while (!$should_exit) {
             navigate($input_array[1]);
             break;
         default:
-            $cmd_path = getCmdPath($cmd);
+            $parsed_cmd = processQuotedStr(trim($cmd));
+            $cmd_path = getCmdPath($parsed_cmd);
             if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+                fwrite(stream: STDOUT, data: $parssed_cmd . ": command not found\n");
                 break;
             }
 
             // exec exists
-            $output = shell_exec($cmd . " " . $input_array[1]);
+            $output = shell_exec($parsed_cmd . " " . $input_array[1]);
             fwrite(stream: STDOUT, data: $output);
     }
 }
