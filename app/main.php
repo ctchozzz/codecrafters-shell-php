@@ -23,9 +23,7 @@ while (!$should_exit) {
             $should_exit = true;
             break;
         case "echo":
-            $arg = $input_array[1];
-            $str = processQuotedStr(trim($arg));
-            fwrite(stream: STDOUT, data: $str . "\n");
+            processTypeEcho($input_array[1]);
             break;
         case "type":
             processTypeCmd($input_array[1]);
@@ -55,6 +53,43 @@ while (!$should_exit) {
     }
 }
 
+function parseRedirects(string $arg): array
+{
+    $mod_arg = $arg;
+    if (str_contains($arg, "1>")) {
+        $mod_arg = str_replace("1>", ">", $mod_arg);
+    }
+
+    $delimiter_pos = strrpos($mod_arg, ">");
+    if ($delimiter_pos == false) {
+        return [$arg];
+    }
+
+    // redirect
+    $new_arg = substr($mod_arg, 0, $delimiter_pos);
+    $file_path = substr($mod_arg, $delimiter_pos + 1);
+    return [trim($new_arg), trim($file_path)];
+}
+
+function writeToFile(string $content, string $file_path)
+{
+    file_put_contents($file_path, $content);
+}
+
+function processTypeEcho(string $arg): void
+{
+    $args = parseRedirects($arg);
+    $str = processQuotedStr(trim($args[0]));
+    if (count($args) == 1) {
+        fwrite(stream: STDOUT, data: $str . "\n");
+        return;
+    }
+
+    // redirect to file
+    $file_path = $args[1];
+    writeToFile($str . "\n", $file_path);
+    return;
+}
 
 function processTypeCmd(string $cmd): void
 {
