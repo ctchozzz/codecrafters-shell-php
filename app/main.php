@@ -2,7 +2,10 @@
 error_reporting(E_ALL);
 
 $should_exit = false;
+$should_pipe_err = false;
 while (!$should_exit) {
+    $should_exit = false;
+    ;
     fwrite(STDOUT, "$ ");
 
     // Wait for user input
@@ -56,12 +59,18 @@ while (!$should_exit) {
             // redirect to file
             if (count($args) > 1) {
                 $query_path = trim($args[0]);
-                $content = shell_exec("cat " . $query_path);
-                if ($content !== false && $content !== null) {
-                    writeToFile($content, trim($args[count($args) - 1]));
-                } else {
-                    fwrite(stream: STDOUT, data: $output);
+                $output = custom_exec("cat " . $query_path);
+
+                // default write output to file and err to stdout
+                $write_content = $output[0];
+                $std_out = $output[1];
+                if ($should_pipe_err) {
+                    // swap
+                    list($std_out, $write_content) = array($write_content, $std_out);
                 }
+
+                writeToFile($write_content, trim($args[count($args) - 1]));
+                fwrite(stream: STDOUT, data: $std_out);
             } else {
                 // to stdout
                 exec_cmd($cmd, $input_array[1] ?? "");
@@ -95,6 +104,9 @@ function parseRedirects(string $arg): array
     $mod_arg = $arg;
     if (str_contains($arg, "1>")) {
         $mod_arg = str_replace("1>", ">", $mod_arg);
+    } else if (str_contains($arg, "2>")) {
+        $mod_arg = str_replace("2>", ">", $mod_arg);
+        $should_pipe_err = true;
     }
 
     $delimiter_pos = strrpos($mod_arg, ">");
@@ -110,6 +122,7 @@ function parseRedirects(string $arg): array
 
 function writeToFile(string $content, string $file_path)
 {
+    // trim the end newlines as some cases will have newline at the end to prevent double newline
     $content = rtrim($content, "\n");
     file_put_contents($file_path, $content . "\n");
 }
@@ -230,4 +243,29 @@ function processQuotedStr(string $str): string
         }
     }
     return $res;
+}
+
+function custom_exec(string $cmd): array
+{
+    $descriptorspec = array(
+        0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+        1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+        2 => array("pipe", "w")   // stderr is a pipe that the child will write to
+    );
+
+    $stdout = null;
+    $stderr = null;
+    $process = proc_open($cmd, $descriptorspec, $pipes);
+    if (is_resource($process)) {
+        fclose($pipes[0]); // Close stdin pipe
+
+        $stdout = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+
+        $stderr = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+
+        proc_close($process);
+    }
+    return array($stdout, $stderr);
 }
