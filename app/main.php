@@ -35,6 +35,17 @@ while (!$should_exit) {
         case "cd":
             navigate($input_array[1]);
             break;
+        case "ls":
+            if (count($input_array) > 1) {
+                $args = parseRedirects($input_array[1]);
+                $query_path = "";
+                if (count($args) > 1) {
+                    $query_path = trim($args[0]);
+                }
+                $content = shell_exec("ls " . $query_path);
+                writeToFile($content . "\n", trim($args[count($args) - 1]));
+                break;
+            }
         default:
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
@@ -61,7 +72,7 @@ function parseRedirects(string $arg): array
     }
 
     $delimiter_pos = strrpos($mod_arg, ">");
-    if ($delimiter_pos == false) {
+    if ($delimiter_pos === false) {
         return [$arg];
     }
 
