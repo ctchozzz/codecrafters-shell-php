@@ -55,6 +55,8 @@ while (!$should_exit) {
             $content = shell_exec("cat " . $query_path);
             if ($content !== false && $content !== null) {
                 writeToFile($content, trim($args[count($args) - 1]));
+            } else {
+                fwrite(stream: STDOUT, data: $output);
             }
             break;
         default:
@@ -109,7 +111,7 @@ function processTypeEcho(string $arg): void
 
     // redirect to file
     $file_path = $args[1];
-    writeToFile($str . "\n", $file_path);
+    writeToFile($str, $file_path);
     return;
 }
 
