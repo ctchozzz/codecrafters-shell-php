@@ -135,6 +135,7 @@ function writeToFile(string $content, string $file_path)
     // trim the end newlines as some cases will have newline at the end to prevent double newline
     $content = rtrim($content, "\n");
     if ($content !== "") {
+        // add newline only if content is not empty
         $content .= "\n";
     }
     file_put_contents($file_path, $content);
