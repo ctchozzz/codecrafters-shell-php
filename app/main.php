@@ -43,7 +43,7 @@ while (!$should_exit) {
                 if (count($args) > 1) {
                     $query_path = trim($args[0]);
                 }
-                $content = shell_exec("ls " . $query_path);
+                $content = shell_exec("ls " . $query_path) . rtrim("\n");
                 writeToFile($content, trim($args[count($args) - 1]));
                 break;
             }
