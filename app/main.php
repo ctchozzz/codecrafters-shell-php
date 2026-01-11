@@ -115,6 +115,7 @@ function parseRedirects(string $arg): array
         $mod_arg = str_replace("1>", ">", $mod_arg);
     } else if (str_contains($arg, "2>")) {
         $mod_arg = str_replace("2>", ">", $mod_arg);
+        global $should_pipe_err;
         $should_pipe_err = true;
     }
 
