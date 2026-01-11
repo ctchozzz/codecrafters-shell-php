@@ -110,6 +110,14 @@ function parseRedirects(string $arg): array
 
 function writeToFile(string $content, string $file_path)
 {
+    // create file / directory if not exist
+    if (!file_exists($file_path)) {
+        $dir_path = dirname($file_path);
+        if (!is_dir($dir_path)) {
+            mkdir($dir_path, recursive: true);
+        }
+        touch($file_path);
+    }
     file_put_contents($file_path . "\n", $content);
 }
 
