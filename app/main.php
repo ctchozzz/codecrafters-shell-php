@@ -146,7 +146,14 @@ function processTypeEcho(string $arg): void
         return;
     }
 
+    global $should_pipe_err;
     // redirect to file
+    if ($should_pipe_err) {
+        // echo has no error output so just write content to stdout
+        fwrite(stream: STDOUT, data: $str . "\n");
+        return;
+    }
+
     $file_path = $args[1];
     writeToFile($str, $file_path);
     return;
