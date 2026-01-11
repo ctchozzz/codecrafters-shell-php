@@ -46,6 +46,17 @@ while (!$should_exit) {
                 writeToFile($content, trim($args[count($args) - 1]));
                 break;
             }
+        case "cat":
+            $args = parseRedirects($input_array[1]);
+            $query_path = "";
+            if (count($args) > 1) {
+                $query_path = trim($args[0]);
+            }
+            $content = shell_exec("cat " . $query_path);
+            if ($content !== false && $content !== null) {
+                writeToFile($content, trim($args[count($args) - 1]));
+            }
+            break;
         default:
             $cmd_path = getCmdPath($cmd);
             if ($cmd_path === null) {
