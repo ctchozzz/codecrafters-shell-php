@@ -46,7 +46,7 @@ while (!$should_exit) {
                 writeToFile($content, trim($args[count($args) - 1]));
                 break;
             }
-            $exec_cmd($cmd, $input_array[1] ?? "");
+            exec_cmd($cmd, $input_array[1] ?? "");
             break;
         case "cat":
             $args = parseRedirects($input_array[1]);
@@ -60,11 +60,11 @@ while (!$should_exit) {
                     fwrite(stream: STDOUT, data: $output);
                 }
             } else {
-                $exec_cmd($cmd, $input_array[1] ?? "");
+                exec_cmd($cmd, $input_array[1] ?? "");
             }
             break;
         default:
-            $exec_cmd($cmd, $input_array[1] ?? "");
+            exec_cmd($cmd, $input_array[1] ?? "");
     }
 }
 
