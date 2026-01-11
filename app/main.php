@@ -134,7 +134,10 @@ function writeToFile(string $content, string $file_path)
 {
     // trim the end newlines as some cases will have newline at the end to prevent double newline
     $content = rtrim($content, "\n");
-    file_put_contents($file_path, $content . "\n");
+    if ($content !== "") {
+        $content .= "\n";
+    }
+    file_put_contents($file_path, $content);
 }
 
 function processTypeEcho(string $arg): void
