@@ -36,6 +36,7 @@ while (!$should_exit) {
             navigate($input_array[1]);
             break;
         case "ls":
+            // redirect to file
             if (count($input_array) > 1) {
                 $args = parseRedirects($input_array[1]);
                 $query_path = "";
@@ -46,11 +47,13 @@ while (!$should_exit) {
                 writeToFile($content, trim($args[count($args) - 1]));
                 break;
             }
+            // to stdout
             exec_cmd($cmd, $input_array[1] ?? "");
             break;
         case "cat":
             $args = parseRedirects($input_array[1]);
             $query_path = "";
+            // redirect to file
             if (count($args) > 1) {
                 $query_path = trim($args[0]);
                 $content = shell_exec("cat " . $query_path);
@@ -60,6 +63,7 @@ while (!$should_exit) {
                     fwrite(stream: STDOUT, data: $output);
                 }
             } else {
+                // to stdout
                 exec_cmd($cmd, $input_array[1] ?? "");
             }
             break;
@@ -106,7 +110,7 @@ function parseRedirects(string $arg): array
 
 function writeToFile(string $content, string $file_path)
 {
-    file_put_contents($file_path, $content);
+    file_put_contents($file_path . "\n", $content);
 }
 
 function processTypeEcho(string $arg): void
