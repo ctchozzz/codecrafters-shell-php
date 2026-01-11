@@ -46,8 +46,17 @@ while (!$should_exit) {
                 if (count($args) > 1) {
                     $query_path = trim($args[0]);
                 }
-                $content = shell_exec("ls " . $query_path);
-                writeToFile($content, trim($args[count($args) - 1]));
+                $output = custom_exec("ls " . $query_path);
+                // default write output to file and err to stdout
+                $write_content = $output[0];
+                $std_out = $output[1];
+                if ($should_pipe_err) {
+                    // swap
+                    list($std_out, $write_content) = array($write_content, $std_out);
+                }
+
+                writeToFile($write_content, trim($args[count($args) - 1]));
+                fwrite(stream: STDOUT, data: $std_out);
                 break;
             }
             // to stdout
