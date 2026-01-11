@@ -110,7 +110,7 @@ function parseRedirects(string $arg): array
 
 function writeToFile(string $content, string $file_path)
 {
-    file_put_contents($file_path, $content . "\n");
+    file_put_contents($file_path, $content);
 }
 
 function processTypeEcho(string $arg): void
