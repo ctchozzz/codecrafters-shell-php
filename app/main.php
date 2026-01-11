@@ -58,7 +58,7 @@ while (!$should_exit) {
                 $query_path = trim($args[0]);
                 $content = shell_exec("cat " . $query_path);
                 if ($content !== false && $content !== null) {
-                    writeToFile($content . "\n", trim($args[count($args) - 1]));
+                    writeToFile($content, trim($args[count($args) - 1]));
                 } else {
                     fwrite(stream: STDOUT, data: $output);
                 }
@@ -110,7 +110,8 @@ function parseRedirects(string $arg): array
 
 function writeToFile(string $content, string $file_path)
 {
-    file_put_contents($file_path, $content);
+    $content = rtrim($content, "\n");
+    file_put_contents($file_path, $content . "\n");
 }
 
 function processTypeEcho(string $arg): void
@@ -124,7 +125,7 @@ function processTypeEcho(string $arg): void
 
     // redirect to file
     $file_path = $args[1];
-    writeToFile($str . "\n", $file_path);
+    writeToFile($str, $file_path);
     return;
 }
 
