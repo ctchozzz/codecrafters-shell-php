@@ -46,35 +46,44 @@ while (!$should_exit) {
                 writeToFile($content, trim($args[count($args) - 1]));
                 break;
             }
+            $exec_cmd($cmd, $input_array[1] ?? "");
+            break;
         case "cat":
             $args = parseRedirects($input_array[1]);
             $query_path = "";
             if (count($args) > 1) {
                 $query_path = trim($args[0]);
-            }
-            $content = shell_exec("cat " . $query_path);
-            if ($content !== false && $content !== null) {
-                writeToFile($content, trim($args[count($args) - 1]));
+                $content = shell_exec("cat " . $query_path);
+                if ($content !== false && $content !== null) {
+                    writeToFile($content, trim($args[count($args) - 1]));
+                } else {
+                    fwrite(stream: STDOUT, data: $output);
+                }
             } else {
-                fwrite(stream: STDOUT, data: $output);
+                $exec_cmd($cmd, $input_array[1] ?? "");
             }
             break;
         default:
-            $cmd_path = getCmdPath($cmd);
-            if ($cmd_path === null) {
-                fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
-                break;
-            }
-
-            // exec exists
-            $closing_quote = "'";
-            if (str_contains($cmd_path, "\'")) {
-                $closing_quote = "\"";
-            }
-            $new_cmd = $closing_quote . $cmd . $closing_quote . " " . $input_array[1];
-            $output = shell_exec($new_cmd);
-            fwrite(stream: STDOUT, data: $output);
+            $exec_cmd($cmd, $input_array[1] ?? "");
     }
+}
+
+function exec_cmd(string $cmd, string $arg): void
+{
+    $cmd_path = getCmdPath($cmd);
+    if ($cmd_path === null) {
+        fwrite(stream: STDOUT, data: $cmd . ": command not found\n");
+        return;
+    }
+
+    // exec exists
+    $closing_quote = "'";
+    if (str_contains($cmd_path, "\'")) {
+        $closing_quote = "\"";
+    }
+    $new_cmd = $closing_quote . $cmd . $closing_quote . " " . $arg;
+    $output = shell_exec($new_cmd);
+    fwrite(stream: STDOUT, data: $output);
 }
 
 function parseRedirects(string $arg): array
